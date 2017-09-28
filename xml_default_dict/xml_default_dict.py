@@ -6,6 +6,7 @@
 #
 
 
+import re
 from xml.dom import minidom
 from collections import defaultdict
 
@@ -13,11 +14,23 @@ from collections import defaultdict
 class return_xml_dict(object):
 
     def __init__(self, xml_file):
+        self.prolog_pattern = re.compile(r"((<\?xml)(.*)(\ ?\??>))(?=.)", re.I)
         self.xml_dict = defaultdict(lambda: False)
         self.doc = minidom.parse(xml_file)
         self.get_nodes = {(x.localName, x) for x in self.doc.childNodes if x.nodeType == 1}
         for i, n in self.get_nodes:
             self.xml_dict[i] = n
+
+    def get_prolog(self):
+        self.get_prolog_data = self.prolog_pattern.findall(self.doc.toxml())
+        if len(self.get_prolog_data) != 0:
+            self.tmp_attrs = ""
+            if self.doc.version != None:
+                self.tmp_attrs = self.tmp_attrs + "version=\"{}\"".format(self.doc.version)
+            if self.doc.encoding != None:
+                self.tmp_attrs = self.tmp_attrs + " encoding=\"{}\"".format(self.doc.encoding)
+            if self.tmp_attrs != "":
+                self.xml_dict['@prolog'] = "<?xml {} ?>".format(self.tmp_attrs)
 
     def return_xml_dicts(self, _child_node):
 
@@ -62,8 +75,9 @@ class return_xml_dict(object):
             return False
 
     def run(self):
+        self.get_prolog()
         self.get_instances = [x for x in self.xml_dict if not isinstance(
-            self.xml_dict[x], (unicode, bool, defaultdict))]
+            self.xml_dict[x], (str, unicode, bool, defaultdict))]
         if len(self.get_instances) >= 1:
             for _instance in self.get_instances:
                 _new_tmp_dict = self.xml_dict[_instance]
@@ -74,5 +88,3 @@ class return_xml_dict(object):
                         self.xml_dict[_instance]['@attrs'][_item[0]] = _item[1]
 
         return self.xml_dict
-
-
