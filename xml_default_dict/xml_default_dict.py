@@ -33,7 +33,6 @@ class return_xml_dict(object):
                 self.xml_dict['@prolog'] = "<?xml {} ?>".format(self.tmp_attrs)
 
     def return_xml_dicts(self, _child_node):
-
         if _child_node.hasChildNodes():
             if len(_child_node.childNodes) > 1:
                 _tmp_dict = defaultdict(lambda: False)
