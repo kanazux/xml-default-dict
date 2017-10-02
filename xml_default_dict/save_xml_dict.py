@@ -21,9 +21,9 @@ class save_file():
     def return_xml_string(self, _dict_obj):
         self.cont = self.cont + 1
         if isinstance(_dict_obj, (defaultdict)):
-            g_k = [x for x in _dict_obj.keys() if x not in ["@prolog", "@attrs"]]
-            get_set = list(set([type(x) for x in g_k]))
-            if get_set[0] == int:
+            g_k = _dict_obj.keys()
+            get_set = list(set([type(x) for x in g_k if x not in ["@prolog", "@attrs"]]))
+            if len(get_set) == 1 and get_set[0] == int:
                 pass
             for i in g_k:
                 if i not in ["@prolog", "@attrs"]:
@@ -41,10 +41,6 @@ class save_file():
                         self.cont = self.cont - 1
                         _delimiter = self.delimiter * self.cont
                         self.text = self.text + "{}</{}>\n".format(_delimiter, i)
-        if isinstance(_dict_obj, (str)):
-            print "str"
-        if isinstance(_dict_obj, (list)):
-            print "list"
 
     def run(self):
         if isinstance(self.d_o, (defaultdict)):
@@ -53,7 +49,6 @@ class save_file():
                 self.text = self.text + self.d_o["@prolog"] + "\n"
             for i in g_k:
                 if i not in ["@prolog", "@attrs"]:
-                    print i
                     self.text = self.text + "<{}>\n".format(i)
                     self.return_xml_string(self.d_o[i])
                     self.text = self.text + "</{}>\n".format(i)
