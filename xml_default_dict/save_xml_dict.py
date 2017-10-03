@@ -52,4 +52,4 @@ class save_file():
                     self.text = self.text + "<{}>\n".format(i)
                     self.return_xml_string(self.d_o[i])
                     self.text = self.text + "</{}>\n".format(i)
-        return self.text
+        return self.text.rstrip('\n')
