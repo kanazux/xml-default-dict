@@ -25,9 +25,9 @@ class return_xml_dict(object):
         self.get_prolog_data = self.prolog_pattern.findall(self.doc.toxml())
         if len(self.get_prolog_data) != 0:
             self.tmp_attrs = ""
-            if self.doc.version != None:
+            if self.doc.version is not None:
                 self.tmp_attrs = self.tmp_attrs + "version=\"{}\"".format(self.doc.version)
-            if self.doc.encoding != None:
+            if self.doc.encoding is not None:
                 self.tmp_attrs = self.tmp_attrs + " encoding=\"{}\"".format(self.doc.encoding)
             if self.tmp_attrs != "":
                 self.xml_dict['@prolog'] = "<?xml {} ?>".format(self.tmp_attrs)
