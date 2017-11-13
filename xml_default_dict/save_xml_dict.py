@@ -20,6 +20,7 @@ class save_file():
         self.tmp_delimiter = ""
         self.tmp_tag = ""
         self.cntrl_tag = False
+        self.tmp_bool = False
 
     def process_list(self, set_list, _dict_obj, _dict_tag_name=None):
         for i in set_list:
@@ -36,7 +37,15 @@ class save_file():
                     else:
                         self.text = self.text + "{}<{}>\n".format(_delimiter, _dict_tag_name)
                 else:
-                    self.text = self.text + "{}<{}>\n".format(_delimiter, i)
+                    if _dict_obj[i] == False:
+                        if len(_delimiter) > len(self.tmp_delimiter):
+                            self.cont = self.cont - 1
+                            _delimiter = self.delimiter * self.cont
+                            self.tmp_delimiter = _delimiter
+                        self.text = self.text + "{}<{}/>\n".format(_delimiter, i)
+                    else:
+                        self.text = self.text + "{}<{}>\n".format(_delimiter, i)
+                        self.tmp_bool = False
                 self.cntrl_tag = False
                 if isinstance(_dict_obj[i], (defaultdict)):
                     self.return_xml_string(_dict_obj[i], i)
@@ -47,13 +56,14 @@ class save_file():
                             self.text = self.text + "{}</{}>\n".format(_delimiter, i)
                     self.cntrl_tag = True
                 else:
-                    self.cont = self.cont + 1
-                    _delimiter = self.delimiter * self.cont
-                    self.text = self.text + "{}{}\n".format(_delimiter, _dict_obj[i])
-                    self.cont = self.cont - 1
-                    _delimiter = self.delimiter * self.cont
-                    self.text = self.text + "{}</{}>\n".format(_delimiter, i)
-                    self.cntrl_tag = True
+                    if _dict_obj[i]:
+                        self.cont = self.cont + 1
+                        _delimiter = self.delimiter * self.cont
+                        self.text = self.text + "{}{}\n".format(_delimiter, _dict_obj[i])
+                        self.cont = self.cont - 1
+                        _delimiter = self.delimiter * self.cont
+                        self.text = self.text + "{}</{}>\n".format(_delimiter, i)
+                        self.cntrl_tag = True
             self.tmp_delimiter = _delimiter
             self.tmp_tag = _dict_tag_name
 

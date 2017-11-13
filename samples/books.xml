@@ -1,5 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <catalog>
+   <w>
+      <wd>teste</wd>
+   </w>
+   <teste/>
+   <teste2/>
+   <teste3/>
+   <teste4/>
+   <teste5/>
+   <teste6/>
    <book id="bk101">
       <author>Gambardella, Matthew</author>
       <title>XML Developer's Guide</title>
