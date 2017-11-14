@@ -26,6 +26,9 @@ class save_file():
         for i in set_list:
             if i not in ["@prolog", "@attrs"]:
                 _delimiter = self.delimiter * self.cont
+                if self.tmp_bool == True and len(_delimiter) > len(self.tmp_delimiter):
+                    self.cont = self.cont - 1
+                    _delimiter = self.delimiter * self.cont
                 if _dict_tag_name is not None:
                     if _dict_tag_name == self.tmp_tag:
                         if len(_delimiter) > len(self.tmp_delimiter):
@@ -34,17 +37,15 @@ class save_file():
                             self.tmp_delimiter = _delimiter
                         if self.cntrl_tag:
                             self.text = self.text + "{}<{}>\n".format(_delimiter, _dict_tag_name)
-                    #else:
-                    #    self.cont = self.cont - 1
-                    #    _delimiter = self.delimiter * self.cont
-                    #    self.tmp_delimiter = _delimiter
+                        if _dict_obj[i] == False:
+                            self.text = self.text + "{}</{}>\n".format(_delimiter, _dict_tag_name)
                     self.tmp_bool = False
                 else:
+                    if self.tmp_bool == True and len(_delimiter) > len(self.tmp_delimiter):
+                        self.cont = self.cont - 1
+                        _delimiter = self.delimiter * self.cont
+                        self.tmp_delimiter = _delimiter
                     if _dict_obj[i] == False:
-                        if self.tmp_bool == True:
-                            if len(_delimiter) > len(self.tmp_delimiter):
-                                self.cont = self.cont - 1
-                                _delimiter = self.delimiter * self.cont
                         self.text = self.text + "{}<{}/>\n".format(_delimiter, i)
                         self.tmp_bool = True
                     else:
@@ -52,6 +53,10 @@ class save_file():
                         self.tmp_bool = False
                 self.cntrl_tag = False
                 if isinstance(_dict_obj[i], (defaultdict)):
+                    if self.tmp_bool == True and len(_delimiter) > len(self.tmp_delimiter):
+                        self.cont = self.cont - 1
+                        _delimiter = self.delimiter * self.cont
+                        self.tmp_delimiter = _delimiter
                     self.return_xml_string(_dict_obj[i], i)
                     if _dict_tag_name is not None:
                         self.text = self.text + "{}</{}>\n".format(_delimiter, _dict_tag_name)
