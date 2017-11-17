@@ -6,3 +6,5 @@ dist/
 build/
 *egg-info
 samples/config.xml
+logs
+teste.txt

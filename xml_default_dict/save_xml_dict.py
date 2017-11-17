@@ -30,15 +30,14 @@ class save_file():
                     self.cont = self.cont - 1
                     _delimiter = self.delimiter * self.cont
                 if _dict_tag_name is not None:
-                    if _dict_tag_name == self.tmp_tag:
-                        if len(_delimiter) > len(self.tmp_delimiter):
-                            self.cont = self.cont - 1
-                            _delimiter = self.delimiter * self.cont
-                            self.tmp_delimiter = _delimiter
-                        if self.cntrl_tag:
-                            self.text = self.text + "{}<{}>\n".format(_delimiter, _dict_tag_name)
-                        if _dict_obj[i] == False:
-                            self.text = self.text + "{}</{}>\n".format(_delimiter, _dict_tag_name)
+                    if len(_delimiter) > len(self.tmp_delimiter):
+                        self.cont = self.cont - 1
+                        _delimiter = self.delimiter * self.cont
+                        self.tmp_delimiter = _delimiter
+                    if self.cntrl_tag:
+                        self.text = self.text + "{}<{}>\n".format(_delimiter, _dict_tag_name)
+                    if _dict_obj[i] == False:
+                        self.text = self.text + "{}</{}>\n".format(_delimiter, _dict_tag_name)
                     self.tmp_bool = False
                 else:
                     if self.tmp_bool == True and len(_delimiter) > len(self.tmp_delimiter):
@@ -63,6 +62,10 @@ class save_file():
                     else:
                         if self.tmp_tag != i:
                             self.text = self.text + "{}</{}>\n".format(_delimiter, i)
+                    if self.tmp_bool == True and len(_delimiter) > len(self.tmp_delimiter):
+                        self.cont = self.cont - 1
+                        _delimiter = self.delimiter * self.cont
+                        self.tmp_delimiter = _delimiter
                     self.tmp_bool = True
                 if isinstance(_dict_obj[i], (unicode)):
                     self.cont = self.cont + 1
@@ -75,7 +78,7 @@ class save_file():
                 self.cntrl_tag = True
             self.tmp_delimiter = _delimiter
             self.tmp_tag = _dict_tag_name
-            print i, self.cont, self.tmp_bool
+            print >> open('logs', 'a'), "{} {} {}".format(i, str(self.cont), str(self.tmp_bool))
 
     def return_xml_string(self, _dict_obj, _tmp_name=""):
         self.cont = self.cont + 1
