@@ -11,6 +11,5 @@ setup(
     url="https://github.com/kanazux/xml-default-dict",
     author='Silvio AS a.k.a kanazuchi',
     author_email='contato@kanazuchi.com',
-    scripts=['scripts/xml-default-parse],
     description="A simple way to convert xml elemnts into a default dict from lib collections.",
 )

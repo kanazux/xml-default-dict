@@ -38,6 +38,7 @@ class save_file():
                         self.text = self.text + "{}<{}>\n".format(_delimiter, _dict_tag_name)
                     if _dict_obj[i] == False:
                         self.text = self.text + "{}</{}>\n".format(_delimiter, _dict_tag_name)
+                        self.tmp_tag = _dict_tag_name
                     self.tmp_bool = False
                 else:
                     if self.tmp_bool == True and len(_delimiter) > len(self.tmp_delimiter):
@@ -56,6 +57,7 @@ class save_file():
                         self.cont = self.cont - 1
                         _delimiter = self.delimiter * self.cont
                         self.tmp_delimiter = _delimiter
+                    self.tmp_tag = i
                     self.return_xml_string(_dict_obj[i], i)
                     if _dict_tag_name is not None:
                         self.text = self.text + "{}</{}>\n".format(_delimiter, _dict_tag_name)
@@ -81,8 +83,10 @@ class save_file():
             print >> open('logs', 'a'), "{} {} {}".format(i, str(self.cont), str(self.tmp_bool))
 
     def return_xml_string(self, _dict_obj, _tmp_name=""):
-        self.cont = self.cont + 1
-        self.tmp_cont = self.cont
+        print self.tmp_tag, _tmp_name
+        if self.tmp_tag != _tmp_name or isinstance(_tmp_name, (int)):
+            self.cont = self.cont + 1
+            self.tmp_cont = self.cont
         if isinstance(_dict_obj, (defaultdict)):
             g_k = _dict_obj.keys()
             get_set = list(set([type(x) for x in g_k if x not in ["@prolog", "@attrs"]]))
